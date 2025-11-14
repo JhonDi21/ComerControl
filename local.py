@@ -30,7 +30,7 @@ def crear_local():
     }
     data["locales"].append(nuevo_local)
     guardar_datos(data)
-    print("✅ Local creado con éxito.")
+    print(" Local creado con éxito.")
 
 def listar_locales():
     data = cargar_datos()
@@ -46,19 +46,19 @@ def editar_local():
     numero = input("Número del local a editar: ")
     local = next((l for l in data["locales"] if l["numero"] == numero), None)
     if not local:
-        print("❌ Local no encontrado.")
+        print(" Local no encontrado.")
         return
     local["tamaño"] = input(f"Nuevo tamaño ({local['tamaño']}): ") or local["tamaño"]
     local["ubicacion"] = input(f"Nueva ubicación ({local['ubicacion']}): ") or local["ubicacion"]
     guardar_datos(data)
-    print("✅ Local actualizado correctamente.")
+    print(" Local actualizado correctamente.")
 
 def eliminar_local():
     data = cargar_datos()
     numero = input("Número del local a eliminar: ")
     data["locales"] = [l for l in data["locales"] if l["numero"] != numero]
     guardar_datos(data)
-    print("✅ Local eliminado correctamente.")
+    print(" Local eliminado correctamente.")
 
 # ---------- Gestión de Contratos ----------
 def asignar_contrato():
@@ -70,10 +70,10 @@ def asignar_contrato():
     loc = next((l for l in data["locales"] if l["numero"] == local_num), None)
 
     if not arr or not loc:
-        print("❌ Arrendatario o local no encontrado.")
+        print(" Arrendatario o local no encontrado.")
         return
     if loc["estado"] == "Ocupado":
-        print("❌ El local ya está ocupado.")
+        print(" El local ya está ocupado.")
         return
 
     inicio = input("Fecha de inicio (YYYY-MM-DD): ")
@@ -88,4 +88,4 @@ def asignar_contrato():
     data["contratos"].append(contrato)
     loc["estado"] = "Ocupado"
     guardar_datos(data)
-    print("✅ Contrato asignado correctamente.")
+    print(" Contrato asignado correctamente.")

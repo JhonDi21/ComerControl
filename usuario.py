@@ -10,7 +10,7 @@ def registrar_arrendatario():
     arr = {"nombre": nombre, "cedula": cedula, "telefono": telefono}
     data["arrendatarios"].append(arr)
     guardar_datos(data)
-    print("✅ Arrendatario registrado correctamente.")
+    print(" Arrendatario registrado correctamente.")
 
 def listar_arrendatarios():
     data = cargar_datos()
@@ -31,7 +31,7 @@ def registrar_pago():
     pago = {"local": local_num, "fecha": fecha, "monto": monto}
     data["pagos"].append(pago)
     guardar_datos(data)
-    print("✅ Pago registrado correctamente.")
+    print(" Pago registrado correctamente.")
 
 def historial_pagos():
     data = cargar_datos()

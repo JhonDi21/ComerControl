@@ -1,0 +1,43 @@
+{
+    "locales": [
+        {
+            "numero": "F",
+            "tamaño": "W",
+            "ubicacion": "W",
+            "estado": "Disponible"
+        },
+        {
+            "numero": "101",
+            "tamaño": "25",
+            "ubicacion": "1er piso, junto a baños",
+            "estado": "Disponible"
+        },
+        {
+            "numero": "202",
+            "tamaño": "27",
+            "ubicacion": "2do piso centro",
+            "estado": "Ocupado"
+        }
+    ],
+    "arrendatarios": [
+        {
+            "nombre": "Felipe",
+            "cedula": "200",
+            "telefono": "300"
+        },
+        {
+            "nombre": "Jhon Perez",
+            "cedula": "1002",
+            "telefono": "312"
+        }
+    ],
+    "contratos": [
+        {
+            "arrendatario": "200",
+            "local": "202",
+            "inicio": "2002-01-21",
+            "fin": "2026-01-21"
+        }
+    ],
+    "pagos": []
+}
