@@ -10,7 +10,7 @@ def registrar_arrendatario():
     arr = {"nombre": nombre, "cedula": cedula, "telefono": telefono}
     data["arrendatarios"].append(arr)
     guardar_datos(data)
-    print("✅ Arrendatario registrado correctamente.")
+    print("Arrendatario registrado correctamente")
 
 def listar_arrendatarios():
     data = cargar_datos()
@@ -20,6 +20,19 @@ def listar_arrendatarios():
     print("\n=== LISTA DE ARRENDATARIOS ===")
     for a in data["arrendatarios"]:
         print(f"{a['nombre']} - Cédula: {a['cedula']} - Tel: {a['telefono']}")
+
+def eliminar_arrendatario():
+    data = cargar_datos()
+    cedula = input("Ingrese la cédula del arrendatario a eliminar: ")
+    arrendatarios = data["arrendatarios"]
+    nuevo_lista = [a for a in arrendatarios if a["cedula"] != cedula]
+
+    if len(nuevo_lista) == len(arrendatarios):
+        print("No se encontró un arrendatario con esa cédula")
+        return
+    data["arrendatarios"] = nuevo_lista
+    guardar_datos(data)
+    print("Arrendatario eliminado correctamente")
 
 # ---------- Pagos ----------
 def registrar_pago():
@@ -31,7 +44,7 @@ def registrar_pago():
     pago = {"local": local_num, "fecha": fecha, "monto": monto}
     data["pagos"].append(pago)
     guardar_datos(data)
-    print("✅ Pago registrado correctamente.")
+    print("Pago registrado correctamente")
 
 def historial_pagos():
     data = cargar_datos()
@@ -39,7 +52,7 @@ def historial_pagos():
     pagos_local = [p for p in data["pagos"] if p["local"] == local_num]
 
     if not pagos_local:
-        print("No hay pagos registrados para ese local.")
+        print("No hay pagos registrados para ese local")
         return
     print(f"\n=== HISTORIAL DE PAGOS - LOCAL {local_num} ===")
     for p in pagos_local:
