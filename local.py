@@ -1,16 +1,9 @@
-# ============================================
-#               local.py
-# ============================================
 
 import json
 import os
 from datetime import datetime
 
 DATA_FILE = "data.json"
-
-# ==========================
-#  Funciones base
-# ==========================
 
 def cargar_datos():
     if not os.path.exists(DATA_FILE):
@@ -22,21 +15,13 @@ def guardar_datos(data):
     with open(DATA_FILE, "w", encoding="utf-8") as f:
         json.dump(data, f, indent=4, ensure_ascii=False)
 
-# ==========================
-# Función para evitar campos vacíos
-# ==========================
-
 def pedir_input(mensaje):
     valor = ""
     while not valor.strip():
         valor = input(mensaje).strip()
         if not valor:
-            print("❌ Este campo no puede estar vacío.")
+            print(" Este campo no puede estar vacío.")
     return valor
-
-# ==========================
-# Función para validar fechas YYYY-MM-DD
-# ==========================
 
 def pedir_fecha(mensaje):
     while True:
@@ -45,11 +30,8 @@ def pedir_fecha(mensaje):
             datetime.strptime(fecha, "%Y-%m-%d")
             return fecha
         except ValueError:
-            print("❌ Fecha inválida. Use formato YYYY-MM-DD (ej: 2026-12-05).")
+            print(" Fecha inválida. Use formato YYYY-MM-DD (ej: 2026-12-05).")
 
-# ==========================
-# Gestión de Locales
-# ==========================
 
 def crear_local():
     data = cargar_datos()
@@ -68,7 +50,7 @@ def crear_local():
 
     data["locales"].append(nuevo_local)
     guardar_datos(data)
-    print("✔ Local creado con éxito.")
+    print(" Local creado con éxito.")
 
 def listar_locales():
     data = cargar_datos()
@@ -93,13 +75,48 @@ def listar_locales():
 
         print(f"Local {local['numero']} - {local['ubicacion']} - {estado}{info_extra}")
 
+def buscar_local():
+    data = cargar_datos()
+    contratos = data["contratos"]
+    arrendatarios = data["arrendatarios"]
+
+    numero = pedir_input("Número del local a buscar: ")
+
+    # Buscar el local
+    local = next((l for l in data["locales"] if l["numero"] == numero), None)
+
+    if not local:
+        print(" No se encontró un local con ese número.")
+        return
+
+    print("\n=== INFORMACIÓN DEL LOCAL ===")
+    print(f"• Número: {local['numero']}")
+    print(f"• Tamaño: {local['tamaño']} m²")
+    print(f"• Ubicación: {local['ubicacion']}")
+    print(f"• Estado: {local['estado']}")
+
+    # Si está ocupado, mostrar quién lo tiene
+    if local["estado"] == "Ocupado":
+        contrato = next((c for c in contratos if c["local"] == numero), None)
+        if contrato:
+            arr = next((a for a in arrendatarios if a["cedula"] == contrato["arrendatario"]), None)
+            if arr:
+                print("• Arrendatario:")
+                print(f"   - Nombre: {arr['nombre']}")
+                print(f"   - Cédula: {arr['cedula']}")
+                print(f"   - Contrato desde: {contrato['inicio']}")
+                print(f"   - Hasta: {contrato['fin']}")
+    else:
+        print("• Este local está disponible.")
+
+
 def editar_local():
     data = cargar_datos()
     numero = pedir_input("Número del local a editar: ")
 
     local = next((l for l in data["locales"] if l["numero"] == numero), None)
     if not local:
-        print("❌ Local no encontrado.")
+        print(" Local no encontrado.")
         return
 
     nuevo_tamaño = input(f"Nuevo tamaño ({local['tamaño']}): ").strip()
@@ -111,7 +128,7 @@ def editar_local():
         local["ubicacion"] = nueva_ubicacion
 
     guardar_datos(data)
-    print("✔ Local actualizado correctamente.")
+    print(" Local actualizado correctamente.")
 
 def eliminar_local():
     data = cargar_datos()
@@ -119,11 +136,7 @@ def eliminar_local():
 
     data["locales"] = [l for l in data["locales"] if l["numero"] != numero]
     guardar_datos(data)
-    print("✔ Local eliminado correctamente.")
-
-# ==========================
-# Gestión de Contratos
-# ==========================
+    print(" Local eliminado correctamente.")
 
 def asignar_contrato():
     data = cargar_datos()
@@ -135,13 +148,13 @@ def asignar_contrato():
     loc = next((l for l in data["locales"] if l["numero"] == local_num), None)
 
     if not arr:
-        print("❌ Arrendatario no encontrado.")
+        print(" Arrendatario no encontrado.")
         return
     if not loc:
-        print("❌ Local no encontrado.")
+        print(" Local no encontrado.")
         return
     if loc["estado"] == "Ocupado":
-        print("❌ El local ya está ocupado.")
+        print(" El local ya está ocupado.")
         return
 
     inicio = pedir_fecha("Fecha de inicio (YYYY-MM-DD): ")
@@ -158,4 +171,4 @@ def asignar_contrato():
     loc["estado"] = "Ocupado"
 
     guardar_datos(data)
-    print("✔ Contrato asignado correctamente.")
+    print(" Contrato asignado correctamente.")

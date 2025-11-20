@@ -13,23 +13,17 @@
             "estado": "Ocupado"
         },
         {
-            "numero": "301",
-            "tamaño": "30",
-            "ubicacion": "3er piso",
-            "estado": "Ocupado"
-        },
-        {
             "numero": "401",
             "tamaño": "45",
             "ubicacion": "4to piso",
-            "estado": "Disponible"
+            "estado": "Ocupado"
         }
     ],
     "arrendatarios": [
         {
-            "nombre": "Felipe",
-            "cedula": "200",
-            "telefono": "300"
+            "nombre": "Felipe R",
+            "cedula": "201",
+            "telefono": "312"
         },
         {
             "nombre": "Jhon Perez",
@@ -39,7 +33,7 @@
     ],
     "contratos": [
         {
-            "arrendatario": "200",
+            "arrendatario": "201",
             "local": "202",
             "inicio": "2002-01-21",
             "fin": "2026-01-21"
@@ -55,6 +49,12 @@
             "local": "101",
             "inicio": "2026-11-12",
             "fin": "2027-11-12"
+        },
+        {
+            "arrendatario": "201",
+            "local": "401",
+            "inicio": "2026-11-11",
+            "fin": "2027-11-11"
         }
     ],
     "pagos": []

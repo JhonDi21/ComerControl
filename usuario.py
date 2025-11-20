@@ -1,9 +1,5 @@
 from local import cargar_datos, guardar_datos, pedir_input
 
-# ==========================
-# Arrendatarios
-# ==========================
-
 def registrar_arrendatario():
     data = cargar_datos()
 
@@ -15,7 +11,8 @@ def registrar_arrendatario():
 
     data["arrendatarios"].append(arr)
     guardar_datos(data)
-    print("✔ Arrendatario registrado correctamente.")
+    print(" Arrendatario registrado correctamente.")
+
 
 
 def listar_arrendatarios():
@@ -40,12 +37,7 @@ def listar_arrendatarios():
         print(
             f"{a['nombre']} - Cédula: {a['cedula']} - Tel: {a['telefono']} - Locales arrendados: {locales_txt}"
         )
-
-
-# ==========================
-# NUEVO → Buscar arrendatario por cédula
-# ==========================
-
+        
 def buscar_arrendatario():
     data = cargar_datos()
     cedula = pedir_input("Ingrese la cédula del arrendatario: ")
@@ -53,7 +45,7 @@ def buscar_arrendatario():
     arr = next((a for a in data["arrendatarios"] if a["cedula"] == cedula), None)
 
     if not arr:
-        print("❌ No existe un arrendatario con esa cédula.")
+        print(" No existe un arrendatario con esa cédula.")
         return
 
     print("\n=== INFORMACIÓN DEL ARRENDATARIO ===")
@@ -71,34 +63,90 @@ def buscar_arrendatario():
         print("Locales arrendados: Ninguno")
 
     # Mostrar locales disponibles
-    locales_disp = [l["numero"] for l in data["locales"] if l["estado"] == "Disponible"]
+    disponibles = [l["numero"] for l in data["locales"] if l["estado"] == "Disponible"]
 
-    print(f"Locales disponibles: {', '.join(locales_disp) if locales_disp else 'Ninguno'}")
+    print(f"Locales disponibles: {', '.join(disponibles) if disponibles else 'Ninguno'}")
 
 
-# ==========================
-# Pagos
-# ==========================
+
+def editar_arrendatario():
+    data = cargar_datos()
+    cedula = pedir_input("Cédula del arrendatario a editar: ")
+
+    arr = next((a for a in data["arrendatarios"] if a["cedula"] == cedula), None)
+
+    if not arr:
+        print(" Arrendatario no encontrado.")
+        return
+
+    print("\nDeje vacío si NO desea modificar un campo.\n")
+
+    nuevo_nombre = input(f"Nuevo nombre ({arr['nombre']}): ").strip()
+    nuevo_telefono = input(f"Nuevo teléfono ({arr['telefono']}): ").strip()
+    nueva_cedula = input(f"Nueva cédula ({arr['cedula']}): ").strip()
+
+    if nuevo_nombre:
+        arr["nombre"] = nuevo_nombre
+    if nuevo_telefono:
+        arr["telefono"] = nuevo_telefono
+    if nueva_cedula:
+        # Actualizar contratos si cambia la cédula
+        for c in data["contratos"]:
+            if c["arrendatario"] == cedula:
+                c["arrendatario"] = nueva_cedula
+        arr["cedula"] = nueva_cedula
+
+    guardar_datos(data)
+    print(" Arrendatario actualizado correctamente.")
+
+def eliminar_arrendatario():
+    data = cargar_datos()
+    cedula = pedir_input("Cédula del arrendatario a eliminar: ")
+
+    arr = next((a for a in data["arrendatarios"] if a["cedula"] == cedula), None)
+
+    if not arr:
+        print(" No existe un arrendatario con esa cédula.")
+        return
+
+    # Liberar locales y borrar contratos
+    nuevos_contratos = []
+    for contrato in data["contratos"]:
+        if contrato["arrendatario"] == cedula:
+            # liberar local
+            for l in data["locales"]:
+                if l["numero"] == contrato["local"]:
+                    l["estado"] = "Disponible"
+        else:
+            nuevos_contratos.append(contrato)
+
+    data["contratos"] = nuevos_contratos
+
+    # Eliminar arrendatario
+    data["arrendatarios"] = [a for a in data["arrendatarios"] if a["cedula"] != cedula]
+
+    guardar_datos(data)
+    print(" Arrendatario eliminado correctamente.")
+
 
 def registrar_pago():
     data = cargar_datos()
 
     local_num = pedir_input("Número del local: ")
     fecha = pedir_input("Fecha del pago (YYYY-MM-DD): ")
-
     monto_input = pedir_input("Monto pagado: ")
 
     try:
         monto = float(monto_input)
     except ValueError:
-        print("❌ El monto debe ser un número.")
+        print(" El monto debe ser un número.")
         return
 
     pago = {"local": local_num, "fecha": fecha, "monto": monto}
 
     data["pagos"].append(pago)
     guardar_datos(data)
-    print("✔ Pago registrado correctamente.")
+    print(" Pago registrado correctamente.")
 
 
 def historial_pagos():
